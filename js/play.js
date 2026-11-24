@@ -250,11 +250,11 @@ export function initPlay(LESSONS, opt) {
     const S = stage('🎮 ألعابُ الدرس — ' + L.title.split(': ').pop(), null); pane = S; tabGames(S.body, gen, L.id);
     const sel = document.createElement('select'); sel.className = 'glsel'; sel.innerHTML = LESSONS.map((x, i) => `<option value="${i}" ${x === L ? 'selected' : ''}>${x.title}</option>`).join(''); S.body.prepend(sel);
     sel.onchange = () => { S.close(); openGames(LESSONS[+sel.value]); }; };
-  const openT = () => { const L = curLesson(); MEM = (L.vocab || []).filter(v => v.key); openTools(makeGen(L, opt.nafes)); };
+  const openT = L0 => { const L = L0 && L0.vocab ? L0 : curLesson(); MEM = (L.vocab || []).filter(v => v.key); openTools(makeGen(L, opt.nafes)); };
   const mk = (id, title, svg, lbl, f) => { const b = document.createElement('button'); b.className = 'tb'; b.id = id; b.title = title; b.innerHTML = svg + `<span class="lbl">${lbl}</span>`; b.onclick = f; return b; };
   const gb = mk('btnGames', 'ألعاب الدرس', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10v5M4.5 12.5h5"/><circle cx="16" cy="11.5" r="1" fill="currentColor"/><circle cx="18.5" cy="14" r="1" fill="currentColor"/></svg>', 'ألعاب', () => openGames());
   const wb = mk('btnWheel', 'عجلة الروليت وأدوات الصف', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>', 'العجلة', openT);
-  const anchor = document.getElementById('btnPrac') || document.getElementById('btnLesson'); anchor.after(gb); gb.after(wb);
+  const anchor = document.getElementById('btnPrac') || document.getElementById('btnLesson'); gb.classList.add('gold'); anchor.after(gb); gb.after(wb);
   const tp = document.getElementById('toolsPop'); if (tp) [['🎡 عجلة الروليت وأدوات الصف', openT], ['🎮 ألعاب الدرس', () => openGames()]].forEach(([t, f]) => { const b = document.createElement('button'); b.textContent = t; tp.prepend(b); b.onclick = () => { tp.classList.remove('open'); f(); }; });
   return { openGames, openTools: openT, isOpen: () => !!document.querySelector('.gstage'), close: () => { const d = document.querySelector('.gstage'); if (d && d._close) d._close(); else if (d) d.remove(); document.body.classList.remove('gopen'); } };
 }

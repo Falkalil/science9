@@ -141,4 +141,4 @@ body.gopen{overflow:hidden}
 .mc.w .b{font-size:18px;color:#15445a}
 .mc.on .f,.mc.ok .f{transform:rotateY(180deg)}.mc.on .b,.mc.ok .b{transform:rotateY(360deg)}
 .mc.ok .b{background:#e2f4ea;box-shadow:0 0 0 3px #07a869}
-.wq{max-width:min(700px,94%)!important;padding:18px!important}.wq .gq{font-size:18px}
+.winner .wq{max-width:min(700px,94%)!important;padding:18px!important}.winner .wq .gq{font-size:18px}

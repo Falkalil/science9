@@ -30,7 +30,7 @@ button{font-family:inherit;cursor:pointer}
    linear-gradient(180deg,#8a5a33,#6e4424 50%,#5a361b);}
 #desk::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
   background:repeating-radial-gradient(ellipse 900px 40px at 30% 120%,rgba(70,35,10,0) 0 14px,rgba(70,35,10,.25) 15px 16px)}
-#lamp{position:absolute;top:calc(-10px + var(--safeT));left:-1vw;width:min(26vw,230px);pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));z-index:3}
+#lamp{position:absolute;top:calc(-10px + var(--safeT));left:0;width:min(26vw,230px);pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));z-index:3}
 #lampLight{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 6%,rgba(255,236,190,.35),rgba(255,220,150,0) 38%);mix-blend-mode:screen;z-index:1}
 /* ── المسرح والكتاب ── */
 #stage{position:absolute;left:0;right:0;top:calc(8px + var(--safeT));bottom:calc(70px + var(--safeB));display:flex;align-items:center;justify-content:center;perspective:1700px;perspective-origin:50% 0%;z-index:2}
@@ -67,7 +67,7 @@ button{font-family:inherit;cursor:pointer}
 .tb:active{transform:scale(.96)}.tb.on{background:var(--accent)}
 .tb svg{width:22px;height:22px;flex:none}
 #pnum{color:#fff;font-weight:800;min-width:92px;text-align:center;font-size:15px;background:rgba(255,255,255,.08);border-radius:12px;height:44px;display:flex;align-items:center;justify-content:center;padding:0 10px;border:0}
-.lbl{display:none}@media(min-width:760px){.lbl{display:inline}}
+.tb .lbl{display:none}@media(min-width:760px){.tb .lbl{display:inline}}
 /* ── اللوحات الجانبية ── */
 .drawer{position:fixed;top:0;bottom:0;right:0;width:min(400px,92vw);background:#f6f9fa;z-index:60;transform:translateX(105%);transition:transform .35s cubic-bezier(.3,.7,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.4);padding-top:var(--safeT)}
 .drawer.open{transform:none}
@@ -192,20 +192,31 @@ body.nt #btnNote{background:#1a4fd0}
 .tb.on{background:#0da9a6}
 #credit{position:fixed;bottom:calc(74px + var(--safeB));left:12px;z-index:4;background:rgba(7,28,38,.72);color:#e6f2f5;font-weight:800;font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.12);pointer-events:none}
 @media (max-width:700px){#credit{display:none}}
+/* ── إضافات تصميم الدرس التجريبي ── */
+.hot{border:2px dashed rgba(13,169,166,.0);transition:background .2s,border-color .2s}
+.hot:hover{background:rgba(13,169,166,.10);border-color:rgba(13,169,166,.8)}
+body.hl .hot,body.nt .hot{pointer-events:none}
+.hot .tapHint{background:rgba(7,28,38,.78)}
+#lessonChip{position:fixed;top:calc(10px + var(--safeT));right:12px;z-index:35;display:flex;align-items:center;gap:8px;background:rgba(7,28,38,.82);color:#fff;border:1px solid rgba(13,169,166,.5);border-radius:99px;padding:6px 8px 6px 14px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.35);font-family:inherit;max-width:calc(100vw - 24px)}
+#lessonChip b{background:var(--accent);border-radius:99px;padding:3px 12px;font-size:13px;white-space:nowrap}
+body.hl #lessonChip,body.zoomed #lessonChip,body.nt #lessonChip{display:none!important}
+.tb.gold{background:rgba(193,180,137,.25);color:#f1e7c2}
+body.lsOpen #bar,body.lsOpen #lessonChip,body.lsOpen #hlBar,body.lsOpen #noteBar,body.lsOpen #credit{display:none!important}
+@media (max-width:700px){#lessonChip{font-size:12.5px}}
 .drawer h2{background:#0b2a38!important;color:#fff;border-bottom-color:#15445a!important}.drawer .x{background:rgba(255,255,255,.12)!important;color:#fff}
 .unit{background:#15445a!important}.ti.ch{color:#0d8f8c!important}.ti b{color:#15445a!important}
 #loading{background:#071c26!important;color:#8fe3e0!important}
 .hot .tapHint{background:rgba(7,28,38,.78)}
 #bar{gap:5px}
 @media (max-width:700px){#btnGames,#btnWheel{display:none}#bar{gap:4px;padding-left:4px;padding-right:4px}#bar .tb{padding:0 8px;min-width:40px}#pnum{min-width:62px;padding:0 6px}}
-@media (max-width:1050px){.lbl{display:none!important}}
+@media (max-width:1050px){.tb .lbl{display:none!important}}
 @media (max-width:370px){#bar .tb{padding:0 5px;min-width:34px}#pnum{min-width:52px;font-size:13px}#bar{gap:3px}}
 </style>
 </head>
 <body>
 <div id="desk"></div>
 <svg id="lamp" viewBox="0 0 300 220" aria-hidden="true">
-  <defs><linearGradient id="lg1" x1="0" x2="1"><stop offset="0" stop-color="#2d3b34"/><stop offset=".5" stop-color="#4f6a5d"/><stop offset="1" stop-color="#22302a"/></linearGradient>
+  <defs><linearGradient id="lg1" x1="0" x2="1"><stop offset="0" stop-color="#15445a"/><stop offset=".5" stop-color="#2a6a80"/><stop offset="1" stop-color="#0b2a38"/></linearGradient>
   <radialGradient id="bulb" cx=".5" cy=".3"><stop offset="0" stop-color="#fffbe8"/><stop offset="1" stop-color="#ffd27a"/></radialGradient></defs>
   <path d="M-20 18 L120 40" stroke="#3b2a1c" stroke-width="10" stroke-linecap="round"/>
   <path d="M110 30 L190 80" stroke="#2c2c2c" stroke-width="7" stroke-linecap="round"/>

@@ -1,7 +1,7 @@
 // تجهيز الكتاب للعمل دون إنترنت (حاسوب – أندرويد – iOS)
 (function () {
   if (window.__IMG || location.protocol === 'file:' || !('serviceWorker' in navigator) || !('caches' in window)) return;
-  const CACHE = 'sci9-v1';
+  const CACHE = 'sci9-v2';
   const box = document.createElement('div');
   box.id = 'offBox';
   box.style.cssText = 'position:fixed;left:12px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:9999;background:#1f6b52;color:#fff;font:600 13px Tajawal,sans-serif;padding:8px 12px;border-radius:12px;box-shadow:0 4px 14px #0005;direction:rtl;display:none;max-width:260px;cursor:pointer';

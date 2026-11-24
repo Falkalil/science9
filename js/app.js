@@ -8,7 +8,7 @@ import * as G9 from './models9.js';
 import { L9 } from './lessons9.js';
 import { initPlay } from './play.js';
 const LESSONS = [...L9].sort((a, b) => a.from - b.from);
-import { initLessons } from './lesson.js';
+import { initLessonApp } from './lessonapp.js';
 import { initPractice } from './practice.js';
 import { NAFES } from './nafes.js';
 
@@ -123,6 +123,7 @@ function setFlip(p) {
 function finishFlip(complete, dur = 520) {
   const f = flip; if (!f) return; const p0 = f.p, p1 = complete ? 1 : 0, t0 = performance.now();
   const step = now => {
+    if (flip !== f) return;
     const k = clamp((now - t0) / (dur * Math.abs(p1 - p0) + 1)); setFlip(p0 + (p1 - p0) * easeIO(k));
     if (k < 1) return requestAnimationFrame(step);
     const fl = $('#flipper'); fl.style.display = 'none'; fl.style.opacity = 1;
@@ -156,7 +157,7 @@ addEventListener('pointerup', e => {
   if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 10 && d.hot) openModel(d.hot.dataset.model, d.hot);
 });
 addEventListener('pointercancel', () => { if (drag && drag.started && flip) finishFlip(false); drag = null; });
-addEventListener('keydown', e => { if (lifted) { if (e.key === 'Escape') closeModel(); return; } if (e.key === 'ArrowLeft') go(1); if (e.key === 'ArrowRight') go(-1); });
+addEventListener('keydown', e => { if (document.body.classList.contains('lsOpen') || document.body.classList.contains('gopen')) return; if (lifted) { if (e.key === 'Escape') closeModel(); return; } if (e.key === 'ArrowLeft') go(1); if (e.key === 'ArrowRight') go(-1); });
 $('#btnNext').onclick = () => go(1); $('#btnPrev').onclick = () => go(-1);
 $('#btnFlat').onclick = () => { const t = stage.classList.toggle('tilted'); stage.classList.toggle('flat', !t); $('#btnFlat').classList.toggle('on', !t); $('#flatLbl').textContent = t ? 'مسطّح' : 'مائل'; layout(); };
 addEventListener('resize', () => { const m = mode; layout(); if (m !== mode) render(); if (lifted) sizeLift(); redrawHL(); });
@@ -507,12 +508,14 @@ function openModelById(id) {
   const m = MODELS.find(x => x.id === id); if (!m) return; if (lifted) closeModel();
   goTo(m.pdf); const wait = () => { if (flip) return setTimeout(wait, 120); const h = book.querySelector(`.slot .hot[data-model="${m.id}"]`); if (h) setTimeout(() => openModel(m.id, h), 250); }; setTimeout(wait, 300);
 }
-const LS = initLessons(LESSONS, { src, PW, PH, goTo: n => { if (lifted) closeModel(); setTimeout(() => goTo(toPdf(n)), lifted ? 800 : 0); }, openModel: openModelById, closeModel: () => { if (lifted) closeModel(); } });
-const PR = initPractice(LESSONS, { key: 'sci9', grade: 9, goTo: n => { if (LS.isOpen()) LS.close(); goTo(toPdf(n)); }, nafes: NAFES });
 const PL = initPlay(LESSONS, { nafes: NAFES });
+const LS = initLessonApp(LESSONS, { src, PW, PH, nafes: NAFES, cur: () => toPrinted(cur), goTo: n => { if (lifted) closeModel(); setTimeout(() => goTo(toPdf(n)), lifted ? 800 : 0); }, openModel: openModelById, closeModel: () => { if (lifted) closeModel(); }, games: L => PL.openGames(L), tools: L => PL.openTools(L) });
+const PR = initPractice(LESSONS, { key: 'sci9', grade: 9, goTo: n => { if (LS.isOpen()) LS.close(); goTo(toPdf(n)); }, nafes: NAFES });
 onPage = n => LS.update(n);
 $('#btnLesson').onclick = () => { const l = LESSONS.find(x => cur >= x.from && cur <= x.to) || LESSONS[0]; LS.open(l); };
 $('#tocList').insertAdjacentHTML('afterbegin', `<div class="unit" style="background:#3d7eb9">الدروس التفاعلية</div>` + LESSONS.map((l, i) => `<div class="ti ch" data-lesson="${i}"><span>▶ ${l.title}</span><b>${ar(l.from)}</b></div>`).join(''));
+$('#tocList').insertAdjacentHTML('afterbegin', `<div class="unit" style="background:#0d8f8c">نشاطات الفصول ومراجعتها</div>` + LS.chx.map((x, i) => `<div class="ti ch" data-chx="${i}" data-sec="launch"><span>▶ الفصل ${ar(x.n)}: نشاطات تمهيدية وأتهيأ للقراءة</span><b>${ar(x.launch.page)}</b></div><div class="ti ch" data-chx="${i}" data-sec="guide"><span>▶ الفصل ${ar(x.n)}: مراجعة الفصل${x.test ? ' والاختبار المقنن' : ''}</span><b>${ar(x.guide.page)}</b></div>`).join(''));
+$('#tocList').addEventListener('click', e => { const it = e.target.closest('[data-chx]'); if (!it) return; e.stopPropagation(); closeDrawers(); LS.openChx(+it.dataset.chx, it.dataset.sec); }, true);
 $('#tocList').addEventListener('click', e => { const it = e.target.closest('[data-lesson]'); if (!it) return; e.stopPropagation(); closeDrawers(); LS.open(LESSONS[+it.dataset.lesson]); }, true);
 
 layout(); render();

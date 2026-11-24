@@ -2,28 +2,31 @@
 // كلُّ محاكاةٍ: SIMS[name](host, { award, AR })
 const AR = s => String(s).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]).replace(/\./g, '٫');
 const CSS = `
-.sim{background:linear-gradient(160deg,#0f3446,#0a2533);color:#dbeaf0;border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 8px 24px rgba(10,40,55,.18)}
-.sim h4{margin:0 0 4px;color:#fff;font-size:18px;display:flex;align-items:center;gap:8px}
-.sim h4 .tg{font-size:12px;background:rgba(13,169,166,.2);color:#8fe3e0;border:1px solid rgba(13,169,166,.4);border-radius:99px;padding:1px 10px}
-.sim .en{font-size:12px;background:#f4efdc;color:#7a6a2c;border-radius:99px;padding:1px 10px;font-weight:800}
-.sim p.hint{margin:2px 0 8px;font-size:14px;color:#a9cbd6}
-.sim canvas,.sim svg{width:100%;display:block;border-radius:12px;background:#071c26}
-.sim .ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
-.sim .ctl label{font-weight:800;font-size:14px;min-width:90px}
-.sim .ctl output{font-weight:800;color:#8fe3e0;min-width:60px}
-.sim input[type=range]{flex:1;min-width:140px;accent-color:#0da9a6}
-.sim .seg{display:flex;gap:6px;flex-wrap:wrap}
-.sim .seg button,.sim .sb{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#e6f2f5;border-radius:10px;padding:7px 12px;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
-.sim .seg button.on,.sim .sb.p{background:#0da9a6;border-color:#0da9a6;color:#fff}
-.sim .out{background:rgba(255,255,255,.06);border-radius:12px;padding:8px 12px;margin-top:8px;font-weight:700;line-height:1.8}
-.sim .out b{color:#c1b489}
-.sim .ok{color:#7ee0b4}.sim .no{color:#ffb4a8}
-.sim .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
-.sim .kv div{background:rgba(255,255,255,.06);border-radius:12px;padding:8px;text-align:center}.sim .kv b{display:block;font-size:22px;color:#fff}
+#lessonApp .xsim{background:linear-gradient(160deg,#0f3446,#0a2533);color:#dbeaf0;border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 8px 24px rgba(10,40,55,.18)}
+#lessonApp .xsim h4{margin:0 0 4px;color:#fff;font-size:18px;display:flex;align-items:center;gap:8px}
+#lessonApp .xsim h4 .tg{font-size:12px;background:rgba(13,169,166,.2);color:#8fe3e0;border:1px solid rgba(13,169,166,.4);border-radius:99px;padding:1px 10px}
+#lessonApp .xsim .en{font-size:12px;background:#f4efdc;color:#7a6a2c;border-radius:99px;padding:1px 10px;font-weight:800}
+#lessonApp .xsim p.hint{margin:2px 0 8px;font-size:14px;color:#a9cbd6}
+#lessonApp .xsim canvas,#lessonApp .xsim svg{width:100%;display:block;border-radius:12px;background:#071c26}
+#lessonApp .xsim .ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+#lessonApp .xsim .ctl label{font-weight:800;font-size:14px;min-width:90px}
+#lessonApp .xsim .ctl output{font-weight:800;color:#8fe3e0;min-width:60px}
+#lessonApp .xsim input[type=range]{flex:1;min-width:140px;accent-color:#0da9a6}
+#lessonApp .xsim .seg{display:flex;gap:6px;flex-wrap:wrap}
+#lessonApp .xsim .seg button,#lessonApp .xsim .sb{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#e6f2f5;border-radius:10px;padding:7px 12px;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+#lessonApp .xsim .seg button.on,#lessonApp .xsim .sb.p{background:#0da9a6;border-color:#0da9a6;color:#fff}
+#lessonApp .xsim .out{background:rgba(255,255,255,.06);border-radius:12px;padding:8px 12px;margin-top:8px;font-weight:700;line-height:1.8}
+#lessonApp .xsim .out b{color:#c1b489}
+#lessonApp .xsim .ok{color:#7ee0b4}#lessonApp .xsim .no{color:#ffb4a8}
+#lessonApp .xsim .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
+#lessonApp .xsim .kv div{background:rgba(255,255,255,.06);border-radius:12px;padding:8px;text-align:center}#lessonApp .xsim .kv b{display:block;font-size:22px;color:#fff}
+#lessonApp .xsim .seg{background:none;border:0;padding:0;border-radius:0}
+#lessonApp .xsim .ctl label{color:#dbeaf0}
+#lessonApp .xsim h4{font-size:18px}
 `;
 function box(host, title, hint, enrich) {
   if (!document.getElementById('simCSS')) { const s = document.createElement('style'); s.id = 'simCSS'; s.textContent = CSS; document.head.appendChild(s); }
-  const d = document.createElement('div'); d.className = 'sim';
+  const d = document.createElement('div'); d.className = 'xsim';
   d.innerHTML = `<h4>🧪 ${title} <span class="tg">محاكاة تفاعلية</span>${enrich ? '<span class="en">إثراء</span>' : ''}</h4>${hint ? `<p class="hint">${hint}</p>` : ''}`;
   host.appendChild(d); return d;
 }
