@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>العلوم – الصف الثالث المتوسط – كتاب تفاعلي</title>
+
+<link href="fonts/tajawal.css" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<link href="play.css" rel="stylesheet">
+<meta name="theme-color" content="#071c26">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="علوم ٣ متوسط">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+:root{--ink:#2b2117;--accent:#0d8f8c;--accent2:#e8a33a;--paper:#fffdf7;--ui:rgba(30,22,14,.78);--safeT:env(safe-area-inset-top,0px);--safeB:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;font-family:'Tajawal',system-ui,sans-serif;color:var(--ink);background:#2a1a0e;touch-action:none;user-select:none;-webkit-user-select:none}
+button{font-family:inherit;cursor:pointer}
+/* ── الطاولة الخشبية والمصباح ── */
+#desk{position:fixed;inset:0;overflow:hidden;
+  background:
+   radial-gradient(ellipse 70% 60% at 52% 38%,rgba(255,214,140,.38),rgba(255,190,100,.12) 45%,rgba(0,0,0,0) 70%),
+   radial-gradient(ellipse 120% 90% at 50% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.65) 100%),
+   repeating-linear-gradient(92deg,rgba(0,0,0,.0) 0 22px,rgba(0,0,0,.07) 23px 24px,rgba(0,0,0,0) 25px 61px,rgba(255,255,255,.04) 62px 63px),
+   repeating-linear-gradient(88deg,rgba(80,40,10,.0) 0 140px,rgba(60,28,8,.18) 141px 150px,rgba(80,40,10,0) 151px 260px),
+   linear-gradient(180deg,#8a5a33,#6e4424 50%,#5a361b);}
+#desk::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
+  background:repeating-radial-gradient(ellipse 900px 40px at 30% 120%,rgba(70,35,10,0) 0 14px,rgba(70,35,10,.25) 15px 16px)}
+#lamp{position:absolute;top:calc(-10px + var(--safeT));left:-1vw;width:min(26vw,230px);pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));z-index:3}
+#lampLight{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 6%,rgba(255,236,190,.35),rgba(255,220,150,0) 38%);mix-blend-mode:screen;z-index:1}
+/* ── المسرح والكتاب ── */
+#stage{position:absolute;left:0;right:0;top:calc(8px + var(--safeT));bottom:calc(70px + var(--safeB));display:flex;align-items:center;justify-content:center;perspective:1700px;perspective-origin:50% 0%;z-index:2}
+#bookWrap{position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+#book{position:relative;transform-style:preserve-3d}
+#bookShadow{position:absolute;left:3%;right:3%;bottom:-3%;height:12%;background:radial-gradient(ellipse at center,rgba(0,0,0,.55),rgba(0,0,0,0) 70%);filter:blur(8px);transform:translateZ(-2px)}
+.tilted #bookWrap{transform:rotateX(24deg) translateY(-2%)}
+@media (max-width:700px){.tilted #bookWrap{transform:rotateX(14deg)}}
+.flat #bookWrap{transform:none}
+.slot{position:absolute;top:0;height:100%;background:var(--paper);overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.1)}
+.slot.R{right:0;width:50%}.slot.L{left:0;width:50%}.slot.S{left:0;width:100%}
+.slot::after,.face::after{content:"";position:absolute;inset:0;pointer-events:none}
+.slot.R::after,.face.R::after{background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.06) 3%,rgba(0,0,0,0) 8%)}
+.slot.L::after,.face.L::after{background:linear-gradient(270deg,rgba(0,0,0,.22),rgba(0,0,0,.06) 3%,rgba(0,0,0,0) 8%)}
+.slot.S::after{background:linear-gradient(270deg,rgba(0,0,0,.18),rgba(0,0,0,0) 4%)}
+#pagesEdge{position:absolute;inset:-6px -5px -9px -5px;border-radius:4px;background:repeating-linear-gradient(0deg,#efe6d2 0 1px,#d9ceb6 1px 2px);box-shadow:0 18px 40px rgba(0,0,0,.45);transform:translateZ(-1px)}
+.page{position:absolute;inset:0}
+.page img.pg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;-webkit-user-drag:none}
+.hot{position:absolute;overflow:hidden;cursor:pointer;border-radius:6px}
+.hot canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hot .badge{position:absolute;top:4%;left:3%;font-weight:800;font-size:clamp(8px,1.25vmin,13px);padding:.25em .7em;border-radius:99px;background:linear-gradient(135deg,#0da9a6,#15445a);color:#fff;box-shadow:0 2px 8px rgba(13,169,166,.55);animation:pulse 2.2s ease-in-out infinite;white-space:nowrap;z-index:2;pointer-events:none}
+.hot .tapHint{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);font-size:clamp(7px,1.1vmin,12px);background:rgba(0,0,0,.55);color:#fff;padding:.2em .7em;border-radius:99px;opacity:.85;white-space:nowrap;pointer-events:none}
+.hot.lifted canvas{opacity:.15}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.patch{position:absolute;background-repeat:no-repeat;pointer-events:none;z-index:3}
+/* ورقة القلب */
+#flipper{position:absolute;top:0;height:100%;transform-style:preserve-3d;display:none;z-index:20}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);overflow:hidden}
+.face.back{transform:rotateY(180deg)}
+.face .shade{position:absolute;inset:0;pointer-events:none;z-index:30}
+/* ── شريط الأدوات ── */
+#bar{position:fixed;left:0;right:0;bottom:0;padding:8px 10px calc(8px + var(--safeB));display:flex;align-items:center;justify-content:center;gap:6px;z-index:30;background:linear-gradient(0deg,rgba(7,28,38,.92),rgba(7,28,38,.62));backdrop-filter:blur(6px)}
+.tb{border:0;background:rgba(255,255,255,.1);color:#fff;border-radius:12px;height:44px;min-width:44px;padding:0 12px;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+.tb:active{transform:scale(.96)}.tb.on{background:var(--accent)}
+.tb svg{width:22px;height:22px;flex:none}
+#pnum{color:#fff;font-weight:800;min-width:92px;text-align:center;font-size:15px;background:rgba(255,255,255,.08);border-radius:12px;height:44px;display:flex;align-items:center;justify-content:center;padding:0 10px;border:0}
+.lbl{display:none}@media(min-width:760px){.lbl{display:inline}}
+/* ── اللوحات الجانبية ── */
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(400px,92vw);background:#f6f9fa;z-index:60;transform:translateX(105%);transition:transform .35s cubic-bezier(.3,.7,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.4);padding-top:var(--safeT)}
+.drawer.open{transform:none}
+.drawer h2{margin:0;padding:16px 18px;font-size:19px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eadfca;background:#eaf2f4}
+.drawer .x{border:0;background:#0001;width:38px;height:38px;border-radius:10px;font-size:20px}
+.drawer .body{overflow:auto;padding:8px 10px calc(20px + var(--safeB));-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.unit{font-weight:800;color:#fff;background:var(--accent);padding:9px 12px;border-radius:10px;margin:12px 4px 6px}
+.ti{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;font-size:15px;cursor:pointer}
+.ti:hover,.ti:active{background:#f3e7cc}.ti.ch{font-weight:800;color:#15445a}
+.ti b{color:#a06a1a;font-weight:800;flex:none}
+.mi{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;cursor:pointer;border:1px solid #eadfca;margin:8px 4px;background:#fff}
+.mi:active{background:#f3e7cc}
+.mi .th{width:64px;height:64px;border-radius:10px;flex:none;background-repeat:no-repeat;border:1px solid #e5d7bb}
+.mi .tt{font-weight:800}.mi .ss{font-size:13px;color:#7a6a55}
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:55;display:none}
+#goto{display:flex;gap:8px;padding:10px 6px}#goto input{flex:1;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1px solid #d9c9a8;direction:ltr;text-align:center}
+#goto button{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:0 16px;font-weight:800}
+/* ── التكبير ── */
+#zoom{position:fixed;inset:0;z-index:70;background:#1d140c;display:none;flex-direction:column}
+#zoom .zt{display:flex;gap:8px;align-items:center;padding:calc(8px + var(--safeT)) 10px 8px;background:#2a1d11;color:#fff;justify-content:space-between}
+#zoom .zs{flex:1;overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+#zoom .zin{display:flex;flex-direction:row-reverse;gap:8px;margin:0 auto;padding:10px;transform-origin:0 0}
+#zoom .zin img{display:block;background:#fff;box-shadow:0 4px 20px #000}
+/* ── المجسّم المرفوع ── */
+#lift{position:fixed;inset:0;z-index:80;display:none}
+#lift .back{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(40,28,16,.55),rgba(10,6,3,.88));backdrop-filter:blur(3px);opacity:0;transition:opacity .5s}
+#lift.show .back{opacity:1}
+#v3{position:absolute;inset:0;transform-origin:0 0;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#v3 canvas{display:block;width:100%;height:100%;touch-action:none}
+#labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.plabel{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;cursor:pointer;background:rgba(255,255,255,.94);color:#123;border:2px solid #0d8f8c;font-weight:800;font-size:13px;padding:3px 9px;border-radius:9px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.plabel::after{content:"";position:absolute;left:50%;bottom:-8px;width:2px;height:7px;background:#0d8f8c;transform:translateX(-50%)}
+.plabel.sel{background:#ffe27a;border-color:#d08a00}
+#ui3{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s .25s}
+#lift.show #ui3{opacity:1}
+#ui3>*{pointer-events:auto}
+#top3{position:absolute;top:calc(10px + var(--safeT));right:10px;left:10px;display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;pointer-events:none}
+#top3>*{pointer-events:auto}
+#ttl{background:rgba(255,255,255,.95);border-radius:14px;padding:8px 14px;font-weight:800;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:60vw}
+#ttl small{display:block;font-weight:600;color:#7a6a55;font-size:12px}
+#btns3{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.b3{border:0;border-radius:12px;background:rgba(255,255,255,.95);color:#1b2a22;font-weight:800;font-size:14px;height:40px;padding:0 12px;box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;align-items:center;gap:6px}
+.b3.on{background:var(--accent);color:#fff}.b3.ret{background:#0da9a6;color:#fff}
+#info{position:absolute;right:12px;top:calc(76px + var(--safeT));width:min(360px,calc(100vw - 24px));background:rgba(255,255,255,.97);border-radius:16px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:none;border-top:5px solid var(--accent)}
+#info h3{margin:0 0 6px;font-size:18px}#info p{margin:0;line-height:1.8;font-size:15px;white-space:pre-line}
+#info .x{position:absolute;left:8px;top:8px;border:0;background:#0001;border-radius:8px;width:30px;height:30px}
+#ctl{position:absolute;left:12px;bottom:calc(12px + var(--safeB));width:min(360px,calc(100vw - 24px));max-height:calc(100% - 130px);overflow:auto;background:rgba(255,253,246,.97);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:10px 12px;touch-action:pan-y}
+#ctl .hd{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:#15445a;cursor:pointer}
+#ctl.min .bd{display:none}
+.cr{margin:10px 0}.cr label{display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:4px}.cr label span{color:#a06a1a}
+.cr input[type=range]{width:100%;accent-color:var(--accent);height:28px}
+.cb{width:100%;border:0;border-radius:12px;background:#e9f4ee;color:#15445a;font-weight:800;height:42px;font-size:15px}
+.cb.on{background:var(--accent);color:#fff}
+.seg{display:flex;gap:4px;background:#efe5cf;border-radius:12px;padding:3px}.seg button{flex:1;border:0;background:none;border-radius:10px;padding:8px 4px;font-weight:700;font-size:13px}.seg button.on{background:#fff;color:#15445a;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.steps .st{font-weight:800;margin:4px 0}.steps .sd{font-size:14px;line-height:1.7;color:#4a3d2c;min-height:3.4em}
+.steps .nav{display:flex;gap:6px;margin-top:6px}.steps .nav button{flex:1;border:0;height:40px;border-radius:10px;background:#e9f4ee;color:#15445a;font-weight:800}
+.steps .dots{display:flex;gap:4px;justify-content:center;margin-top:6px}.steps .dots i{width:8px;height:8px;border-radius:9px;background:#d8ccb2}.steps .dots i.on{background:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:13px}.legend span{display:flex;align-items:center;gap:5px}.legend i{width:12px;height:12px;border-radius:9px;display:inline-block}
+#toast{position:absolute;left:50%;top:calc(70px + var(--safeT));transform:translateX(-50%);max-width:min(560px,86vw);background:rgba(20,40,30,.92);color:#fff;padding:10px 16px;border-radius:14px;font-size:15px;line-height:1.7;display:none;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+#quiz{position:absolute;right:12px;top:calc(76px + var(--safeT));width:min(380px,calc(100vw - 24px));background:#fff;border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:none;border-top:5px solid #0da9a6}
+#quiz .qh{display:flex;justify-content:space-between;font-weight:800;color:#a85a00;font-size:14px}
+#quiz .qq{font-size:17px;font-weight:800;margin:8px 0;line-height:1.6}
+#quiz .qf{font-weight:800;min-height:1.5em}#quiz .ok{color:#1f8a4c}#quiz .no{color:#c62828}
+#quiz .qb{display:flex;gap:6px;margin-top:8px}#quiz .qb button{flex:1;border:0;height:40px;border-radius:10px;font-weight:800;background:#fff0dc;color:#a85a00}
+#cmp{position:absolute;left:12px;top:calc(76px + var(--safeT));width:min(330px,46vw);background:#fff;border-radius:14px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:none}
+#cmp .ci{width:100%;background-repeat:no-repeat;border-radius:8px;border:1px solid #ddd}
+#cmp .cc{font-size:12px;color:#7a6a55;font-weight:700;margin:2px 4px 6px;display:flex;justify-content:space-between}
+@media (max-width:700px){
+  #ctl{left:8px;right:8px;width:auto;max-height:42%;bottom:calc(8px + var(--safeB))}
+  #info,#quiz{right:8px;left:8px;width:auto;top:auto;bottom:calc(50% + 8px)}
+  #cmp{top:calc(116px + var(--safeT));width:44vw}
+  #ttl{max-width:100%;font-size:14px}
+  .b3{height:36px;font-size:13px;padding:0 9px}
+  #toast{top:calc(118px + var(--safeT))}
+}
+
+/* ── قلم التظليل ── */
+canvas.hlc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6;mix-blend-mode:multiply;opacity:.5}
+body.hl canvas.hlc{pointer-events:auto;cursor:crosshair;touch-action:none}
+body.hl .hot .badge,body.hl .hot .tapHint{display:none}
+#hlBar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + var(--safeB));z-index:40;display:none;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;background:rgba(255,253,246,.97);border-radius:16px;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.45);max-width:calc(100vw - 16px)}
+body.hl #hlBar{display:flex}
+#hlBar .sw{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #cbb;cursor:pointer}
+#hlBar .sw.on{box-shadow:0 0 0 3px #15445a}
+#hlBar .hb{border:0;border-radius:10px;height:36px;padding:0 10px;font-weight:800;background:#efe6d2;color:#3a2a1a;font-size:13px}
+#hlBar .hb.on{background:#0d8f8c;color:#fff}
+#hlBar .sep{width:1px;height:28px;background:#ddd}
+@media (max-width:700px){#hlBar{left:8px;right:8px;transform:none;max-width:none;gap:6px}#hlBar .sw{width:30px;height:30px}#hlBar .hb{height:34px;padding:0 8px}}
+body.hl #btnHL{background:#ffcf3a;color:#3a2a1a}
+
+#pz{position:relative;transform-origin:0 0;transform-style:preserve-3d;will-change:transform}
+#pz.anim{transition:transform .3s ease}
+.mob{display:none}
+@media (max-width:700px){.dsk{display:none!important}.mob{display:flex}}
+#toolsPop{position:fixed;bottom:calc(70px + var(--safeB));left:10px;z-index:45;background:#f6f9fa;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45);padding:8px;display:none;flex-direction:column;gap:6px;min-width:190px}
+#toolsPop.open{display:flex}
+#toolsPop button{border:0;border-radius:12px;background:#e6eef1;height:44px;font-family:inherit;font-weight:800;font-size:15px;text-align:right;padding:0 14px}
+#zReset{position:fixed;top:calc(10px + var(--safeT));right:12px;z-index:36;border:0;border-radius:999px;background:#15445a;color:#fff;font-family:inherit;font-weight:800;padding:9px 14px;box-shadow:0 6px 20px rgba(0,0,0,.4);display:none}
+body.zoomed #zReset{display:block}
+body.zoomed #lessonChip{display:none!important}
+/* ── الكتابة على الكتاب ── */
+.note{position:absolute;z-index:7;min-width:1.5em;padding:.1em .3em;font-family:'Tajawal',sans-serif;font-weight:700;line-height:1.35;white-space:pre-wrap;word-break:break-word;max-width:70%;border-radius:4px;outline:none;direction:rtl;text-align:right;pointer-events:none}
+.note.bg{background:rgba(255,236,120,.85);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+body.nt .note{pointer-events:auto;outline:1.5px dashed rgba(26,79,208,.5);cursor:text}
+body.nt .note:focus{outline:2px solid #1a4fd0;background-color:rgba(255,255,255,.75)}
+body.nt .note.bg:focus{background:rgba(255,236,120,.95)}
+.note .nx,.note .ng{display:none;position:absolute;top:-.9em;width:1.6em;height:1.6em;border-radius:50%;border:0;color:#fff;font-size:12px;line-height:1.6em;text-align:center;padding:0;cursor:pointer;user-select:none;-webkit-user-select:none}
+.note .nx{left:-.9em;background:#d32f2f}.note .ng{right:-.9em;background:#15445a;cursor:grab;touch-action:none}
+body.nt .note .nx,body.nt .note .ng{display:block}
+body.nt .slot .page{cursor:text}
+body.nt .hot .badge,body.nt .hot .tapHint{display:none}
+#noteBar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + var(--safeB));z-index:40;display:none;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;background:rgba(255,253,246,.97);border-radius:16px;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.45);max-width:calc(100vw - 16px)}
+body.nt #noteBar{display:flex}
+#noteBar .nc{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #cbb;cursor:pointer}#noteBar .nc.on{box-shadow:0 0 0 3px #0da9a6}
+#noteBar .hb{border:0;border-radius:10px;height:36px;padding:0 10px;font-weight:800;background:#efe6d2;color:#3a2a1a;font-size:13px;font-family:inherit}#noteBar .hb.on{background:#0d8f8c;color:#fff}
+#noteBar .sep{width:1px;height:28px;background:#ddd}
+body.nt #btnNote{background:#1a4fd0}
+@media (max-width:700px){#noteBar{left:8px;right:8px;transform:none;max-width:none;gap:6px}}
+#loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#ffe9c4;font-weight:800;font-size:18px;z-index:100;background:#2a1a0e;transition:opacity .5s}
+
+/* ── هوية الثالث المتوسط: ناضجة بألوان الوزارة ── */
+.tb.on{background:#0da9a6}
+#credit{position:fixed;bottom:calc(74px + var(--safeB));left:12px;z-index:4;background:rgba(7,28,38,.72);color:#e6f2f5;font-weight:800;font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.12);pointer-events:none}
+@media (max-width:700px){#credit{display:none}}
+.drawer h2{background:#0b2a38!important;color:#fff;border-bottom-color:#15445a!important}.drawer .x{background:rgba(255,255,255,.12)!important;color:#fff}
+.unit{background:#15445a!important}.ti.ch{color:#0d8f8c!important}.ti b{color:#15445a!important}
+#loading{background:#071c26!important;color:#8fe3e0!important}
+.hot .tapHint{background:rgba(7,28,38,.78)}
+#bar{gap:5px}
+@media (max-width:700px){#btnGames,#btnWheel{display:none}#bar{gap:4px;padding-left:4px;padding-right:4px}#bar .tb{padding:0 8px;min-width:40px}#pnum{min-width:62px;padding:0 6px}}
+@media (max-width:1050px){.lbl{display:none!important}}
+@media (max-width:370px){#bar .tb{padding:0 5px;min-width:34px}#pnum{min-width:52px;font-size:13px}#bar{gap:3px}}
+</style>
+</head>
+<body>
+<div id="desk"></div>
+<svg id="lamp" viewBox="0 0 300 220" aria-hidden="true">
+  <defs><linearGradient id="lg1" x1="0" x2="1"><stop offset="0" stop-color="#2d3b34"/><stop offset=".5" stop-color="#4f6a5d"/><stop offset="1" stop-color="#22302a"/></linearGradient>
+  <radialGradient id="bulb" cx=".5" cy=".3"><stop offset="0" stop-color="#fffbe8"/><stop offset="1" stop-color="#ffd27a"/></radialGradient></defs>
+  <path d="M-20 18 L120 40" stroke="#3b2a1c" stroke-width="10" stroke-linecap="round"/>
+  <path d="M110 30 L190 80" stroke="#2c2c2c" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="112" cy="34" r="9" fill="#555"/><circle cx="190" cy="80" r="8" fill="#555"/>
+  <path d="M168 70 L262 108 L238 168 L150 120 Z" fill="url(#lg1)"/>
+  <ellipse cx="200" cy="145" rx="52" ry="20" transform="rotate(22 200 145)" fill="url(#bulb)"/>
+</svg>
+<div id="lampLight"></div>
+<div id="stage" class="tilted">
+  <div id="pz"><div id="bookWrap"><div id="bookShadow"></div><div id="pagesEdge"></div><div id="book"></div></div></div>
+</div>
+<div id="bar">
+  <button class="tb" id="btnToc" title="الفهرس"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="lbl">الفهرس</span></button>
+  <button class="tb" id="btnModels" title="المجسّمات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg><span class="lbl">المجسّمات</span></button>
+  <button class="tb" id="btnPrev" title="الصفحة السابقة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button id="pnum">ص ١</button>
+  <button class="tb" id="btnNext" title="الصفحة التالية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="tb dsk" id="btnFlat" title="اجعل الكتاب مسطّحًا"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 5v14"/></svg><span class="lbl" id="flatLbl">مسطّح</span></button>
+  <button class="tb dsk" id="btnHL" title="قلم التظليل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h7"/><path d="M14.5 4.5l5 5L10 19H5v-5z"/></svg><span class="lbl">تظليل</span></button>
+  <button class="tb" id="btnLesson" title="الدرس التفاعلي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4z"/><path d="M7 9v5c0 1.5 2.5 3 5 3s5-1.5 5-3V9"/></svg><span class="lbl">الدرس</span></button>
+  <button class="tb dsk" id="btnNote" title="الكتابة على الكتاب"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M12 5v14M9 19h6"/></svg><span class="lbl">كتابة</span></button>
+  <button class="tb dsk" id="btnZoom" title="تكبير للقراءة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M11 8v6M8 11h6"/></svg><span class="lbl">تكبير</span></button>
+  <button class="tb dsk" id="btnInstall" title="تثبيت الكتاب كتطبيق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3M10 18h4"/></svg><span class="lbl">تثبيت</span></button>
+  <button class="tb mob" id="btnTools" title="الأدوات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4.5l5 5L10 19H5v-5z"/></svg></button>
+</div>
+<div id="toolsPop"><button data-t="btnHL">🖍 تظليل</button><button data-t="btnNote">✍️ كتابة</button><button data-t="btnFlat">📖 <span id="flatLbl2">مسطّح</span></button><button data-t="btnZoom">🔍 تكبير للقراءة</button><button data-t="btnInstall">📲 تثبيت الكتاب كتطبيق</button></div>
+<button id="zReset">↺ إعادة حجم الصفحة</button>
+<div id="noteBar"><span style="font-weight:800;font-size:13px">✍️ المس أيّ مكانٍ في الصفحة لتكتب</span><span class="sep"></span>
+  <span class="nc on" data-c="#1a4fd0" style="background:#1a4fd0"></span><span class="nc" data-c="#d32f2f" style="background:#d32f2f"></span><span class="nc" data-c="#1b7a3a" style="background:#1b7a3a"></span><span class="nc" data-c="#222" style="background:#222"></span>
+  <span class="sep"></span><button class="hb" data-ns="s">صغير</button><button class="hb on" data-ns="m">متوسط</button><button class="hb" data-ns="l">كبير</button>
+  <span class="sep"></span><button class="hb" id="noteBg">خلفية صفراء</button><button class="hb" id="noteDone" style="background:#0da9a6;color:#fff">تم ✓</button></div>
+<div id="hlBar">
+  <span class="sw on" data-c="#ffe14d" style="background:#ffe14d"></span><span class="sw" data-c="#7cf27a" style="background:#7cf27a"></span><span class="sw" data-c="#ff8ad8" style="background:#ff8ad8"></span><span class="sw" data-c="#7fd0ff" style="background:#7fd0ff"></span><span class="sw" data-c="#ffb24d" style="background:#ffb24d"></span>
+  <span class="sep"></span>
+  <button class="hb" data-w="s">رفيع</button><button class="hb on" data-w="m">متوسط</button><button class="hb" data-w="l">عريض</button>
+  <span class="sep"></span>
+  <button class="hb on" id="hlStraight">خطّ مستقيم</button><button class="hb" id="hlErase">ممحاة</button><button class="hb" id="hlUndo">↶ تراجع</button><button class="hb" id="hlClear">مسح الصفحة</button><button class="hb" id="hlDone" style="background:#0da9a6;color:#fff">تم ✓</button>
+</div>
+<div id="scrim"></div>
+<div class="drawer" id="tocD"><h2>الفهرس <button class="x" data-close>×</button></h2><div class="body"><div id="goto"><input id="gotoIn" type="number" inputmode="numeric" placeholder="رقم الصفحة"><button id="gotoBtn">اذهب</button></div><div id="tocList"></div></div></div>
+<div class="drawer" id="modD"><h2>المجسّمات ثلاثية الأبعاد <button class="x" data-close>×</button></h2><div class="body" id="modList"></div></div>
+<div id="zoom"><div class="zt"><button class="tb" id="zOut">−</button><b id="zPct">100٪</b><button class="tb" id="zIn">+</button><button class="tb" id="zClose" style="background:#0da9a6">إغلاق</button></div><div class="zs" id="zs"><div class="zin" id="zin"></div></div></div>
+<div id="lift">
+  <div class="back"></div>
+  <div id="v3"><div id="labels"></div></div>
+  <div id="ui3">
+    <div id="top3"><div id="ttl"></div>
+      <div id="btns3">
+        <button class="b3 on" id="bLabels">أسماء الأجزاء</button>
+        <button class="b3" id="bQuiz">اختبرني</button>
+        <button class="b3" id="bCmp">رسم الكتاب</button>
+        <button class="b3 ret" id="bRet">↩ إلى الصفحة</button>
+      </div></div>
+    <div id="info"><button class="x" id="infoX">×</button><h3></h3><p></p></div>
+    <div id="quiz"></div>
+    <div id="cmp"><div class="cc"><span>الرسم الأصلي في الكتاب</span><span id="cmpP"></span></div><div class="ci" id="cmpI"></div></div>
+    <div id="toast"></div>
+    <div id="ctl"><div class="hd" id="ctlH"><span>تحكّم بالمجسّم</span><span id="ctlA">▾</span></div><div class="bd" id="ctlB"></div></div>
+  </div>
+</div>
+<div id="credit">تصميم: أ. هيفاء السلمي</div>
+<div id="loading">جارٍ فتح الكتاب…</div>
+<script type="importmap">{"imports":{"three":"./js/three.module.min.js","three/addons/":"./js/addons/"}}</script>
+<div id="instM" style="position:fixed;inset:0;z-index:2147483647;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;direction:rtl">
+<div style="background:#f6f9fa;color:#2a1d11;border-radius:18px;max-width:420px;width:100%;padding:18px 18px 14px;font-family:Tajawal,sans-serif;box-shadow:0 10px 40px #0007">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="font-size:28px">📲</span><b style="font-size:19px;color:#15445a">تثبيتُ الكتابِ كتطبيق</b></div>
+<div id="instB" style="font-size:15.5px;line-height:1.9"></div>
+<button id="instX" style="margin-top:12px;width:100%;border:0;border-radius:12px;padding:11px;background:#15445a;color:#fff;font:700 16px Tajawal,sans-serif">حسنًا</button></div></div>
+<script>
+(function(){
+  var dp=null, ua=navigator.userAgent, isIOS=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),
+      isAnd=/Android/i.test(ua), isApk=location.hostname==='book.sci9.local',
+      standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true,
+      local=location.protocol==='file:'||!!window.__IMG, framed=false;
+  try{framed=window.top!==window.self}catch(e){framed=true}
+  function hide(){['btnInstall'].forEach(function(id){var b=document.getElementById(id);if(b)b.style.display='none'});var t=document.querySelector('#toolsPop [data-t="btnInstall"]');if(t)t.style.display='none'}
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e});
+  addEventListener('appinstalled',function(){hide()});
+  function msg(h){document.getElementById('instB').innerHTML=h;document.getElementById('instM').style.display='flex'}
+  function go(){
+    if(dp){dp.prompt();dp.userChoice.then(function(){dp=null});return}
+    if(local){msg('هذه النسخةُ <b>ملفٌّ محفوظٌ على جهازك</b>، وهي تعملُ دونَ إنترنت بفتحِها مباشرةً في أيِّ وقت، فلا تحتاجُ إلى تثبيت.<br>أمّا إضافتُها أيقونةً كتطبيق فلا تسمحُ بها المتصفّحاتُ لأيِّ ملفٍّ محلّي.<br><br>• <b>أندرويد:</b> ثبّتْ ملفَّ التطبيقِ <b>APK</b>.<br>• <b>آيفون وآيباد والحاسوب:</b> افتحِ الكتابَ من <b>رابطِ موقعِه</b> على الإنترنت، ثم اضغطْ زرَّ «تثبيت» هناك.');return}
+    if(framed){msg('الكتابُ معروضٌ داخلَ صفحةٍ أخرى، والتثبيتُ يحتاجُ إلى فتحِه في نافذةٍ مستقلّة.<br><br><a href="'+location.href.split('#')[0]+'" target="_blank" rel="noopener" style="display:inline-block;background:#0da9a6;color:#fff;padding:8px 14px;border-radius:10px;text-decoration:none;font-weight:700">↗ افتحِ الكتابَ في نافذةٍ مستقلّة</a><br>ثم اضغطْ «تثبيت» مرّةً أخرى.');return}
+    if(isIOS){ if(/CriOS|FxiOS|EdgiOS/.test(ua)){msg('على الآيفون والآيباد يتمُّ التثبيتُ من متصفّحِ <b>Safari</b>: انسخِ الرابطَ وافتحْه في Safari، ثم اتّبعِ الخطوات.');return}
+      msg('١. اضغطْ زرَّ <b>المشاركة</b> <span style="font-size:20px">⬆️</span> أسفلَ الشاشة (أو أعلاها في الآيباد).<br>٢. اخترْ <b>«إضافة إلى الشاشة الرئيسية»</b>.<br>٣. اضغطْ <b>«إضافة»</b>.<br><br>بعدَ ظهورِ رسالةِ «✓ اكتملَ التجهيز» يعملُ الكتابُ من أيقونتِه دونَ إنترنت.');return}
+    if(isAnd){msg('١. اضغطْ قائمةَ المتصفّح <b>⋮</b> أعلى الشاشة.<br>٢. اخترْ <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.<br><br>أو ثبّتْ ملفَّ التطبيقِ <b>APK</b> مباشرة.');return}
+    msg('في <b>Chrome</b> أو <b>Edge</b>: اضغطْ أيقونةَ التثبيت <span style="font-size:18px">⊕</span> في يسارِ شريطِ العنوان، أو من القائمة <b>⋮</b> اخترْ «حفظ ومشاركة» ← <b>«تثبيت الصفحة كتطبيق»</b>.<br><br>في <b>Safari</b> على ماك: قائمة «ملف» ← <b>«إضافة إلى Dock»</b>.');
+  }
+  function init(){
+    if(standalone||isApk){hide();return}
+    document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#btnInstall,#toolsPop [data-t="btnInstall"]');if(!t)return;e.preventDefault();e.stopPropagation();var tp=document.getElementById('toolsPop');if(tp)tp.classList.remove('open');go()},true);
+    document.getElementById('instX').onclick=document.getElementById('instM').onclick=function(e){if(e.target.id==='instX'||e.target.id==='instM')document.getElementById('instM').style.display='none'};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script type="module" src="js/app.js"></script>
+<script src="js/offline.js"></script>
+</body>
+</html>
